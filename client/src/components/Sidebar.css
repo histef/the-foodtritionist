@@ -1,0 +1,30 @@
+
+.side-bar {
+  position: fixed;
+  background-color: #f7f7f7;
+  width: 175px;
+  height: 100%;
+  z-index: 1;
+  top:0;
+  right: 0;
+}
+
+.compare-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+}
+
+.comp-list-item {
+  display: flex;
+  align-items: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: lowercase;
+  margin: 10px auto;
+  padding: 0 5px;
+  width: 140px;
+  height: 160px;
+  background-color: #F77065;
+  border-radius: 5px;
+  box-shadow: 2px 2px 6px #888888;
+}

@@ -1,0 +1,43 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  background-image: linear-gradient(#adf4e6, #666);
+}
+.App-header {
+  min-height: 40vh;
+  font-size: calc(10px + 2vmin);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-family: 'Pacifico', cursive;
+  color: 1F1a1a;
+}
+
+.searchfield {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+#search {
+  margin: 10px;
+  width: 50vw;
+}
+
+.search-btn {
+  background-color: #707070;
+  border: solid #707070 1px;
+  color: #f7f7f7;
+}
+
+.list-group {
+  margin: 15px auto;
+  width: 80%;
+}
+
+.list-group-item {
+  margin: 5px 0;
+  padding-top: 3px;
+  padding-bottom: 3px; 
+}
