@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/the-foodtritionist/precache-manifest.1c5f92266afc07ee4ce8b66fc2520193.js"
+  "/the-foodtritionist/precache-manifest.4a56b79ff31e81464e5e0727f0534c1e.js"
 );
 
 workbox.clientsClaim();
