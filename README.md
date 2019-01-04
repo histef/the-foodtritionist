@@ -2,10 +2,9 @@
 Web application using React, ReactStrap, and the USDA Food Composition API.
 
 ## Install
-*Simply clone repository
-*Cd into client directory
-*Run `npm install`
-*Run `npm start`
+* Simply clone repository
+* Run `npm install`
+* Run `npm start`
 
 
 
