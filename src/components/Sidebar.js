@@ -3,14 +3,22 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap'
 import './Sidebar.css';
 
-const Sidebar = ({ item1, item2}) => {
+const Sidebar = ({ item1, item2, removeChosenItem}) => {
   return (
     <div className='side-bar'>
-      <div className='comp-list-item'>
+      <div className='comp-list-item item1'>
+        <p
+        className='close-btn'
+        onClick={e => removeChosenItem(e)}
+        >X</p>
         <p>{item1.name}</p>
       </div>
-      <div className='comp-list-item'>
-       <p>{item2.name}</p>
+      <div className='comp-list-item item2'>
+        <p
+          className='close-btn'
+          onClick={e => removeChosenItem(e)}
+        >X</p>
+        <p>{item2.name}</p>
       </div>
         <Link to='/comparepage'>
           <Button
