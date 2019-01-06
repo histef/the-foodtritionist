@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Compare from './components/ComparePage';
+import ItemListGroup from './ItemListGroup';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, FormGroup, Label, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import { Form, FormGroup, Label, Input, ListGroup } from 'reactstrap';
 import './App.css';
 
 class App extends Component {
@@ -11,14 +12,15 @@ class App extends Component {
   state = {
     search: '',
     searchListItems: [],
+    adjSearchListItems: [],
     item1: [],
-    item2: [],
     cal1: [],
     vitE1: [],
     fat1: [],
     sugar1: [],
     item1Card: false,
     item2Card: false,
+    item2: [],
     cal2: [],
     vitE2: [],
     fat2: [],
@@ -50,8 +52,12 @@ class App extends Component {
           searchListItems: data.list.item
         })
       })
+      .then(dat => 
+        this.displayListName(this.state.searchListItems)
+      )
       .catch(error => console.log(error))
     }
+
   }
 
   onPagination = () => {
@@ -107,9 +113,60 @@ class App extends Component {
     }
   }
 
-  render() {
+  removeChosenItem = e => {
+    if (e.target.parentNode.className === 'item1'){
+      //remove item one stuff
+      this.setState({
+        item1: [],
+        cal1: [],
+        vitE1: [],
+        fat1: [],
+        sugar1: [],
+        item1Card: false,
+      })
+    }
+    else if (e.target.parentNode.className === 'item2') {
+      //remove item2 stuff
+      this.setState({
+        item2Card: false,
+        item2: [],
+        cal2: [],
+        vitE2: [],
+        fat2: [],
+        sugar2: []
+      })
+    }
+  }
 
-    const { searchListItems, item1, item2 } = this.state;
+  displayListName = items => {
+    //i dont think this is wha I want: let displayName;
+  // //adjSearchlistItems and pass this to itemlist group, add new name property to object
+    let listItemsDisplayName = items.map(itemObject => {
+  //     //var display name will house the name I want displayed on
+      let displayName = itemObject.name.split('upc', 1)[0];
+  //     //careful with above: does 'let' reassign to new itemObject in this loop? I think so
+
+  //     //add a new property to each itemObject; 'displayName'
+      Object.assign(itemObject, { newName: displayName })
+  //   })
+    // console.log(itemObject) --function working
+    })
+    this.setState({
+      adjSearchListItems: listItemsDisplayName
+    })
+    //we get an array of 10 nulls...so something didn't work
+
+    // console.log(item) - now showing list items had to put in promise chain onSearchsubmit
+  }
+
+  render() {
+    // console.log(this.displayListName('john paul name upc bread animal'))
+    const {
+      searchListItems,
+      adjSearchListItems,
+      item1,
+      item2
+    } = this.state;
 
     return (
       <div className="App">
@@ -121,8 +178,18 @@ class App extends Component {
             <Form inline className='searchfield'>
               <FormGroup>
                 <Label for='search'>
-                  <Input id='search' className='search-text' onChange={e=>this.onSearch(e)} type='search' placeholder='enter food item'/>
-                  <Input className='search-btn' type='submit' value='Search' onClick={e=>this.onSearchSubmit(e)}/>
+                  <Input id='search'
+                    className='search-text'
+                    onChange={e=>this.onSearch(e)}
+                    type='search'
+                    placeholder='enter food item'
+                  />
+                  <Input
+                    className='search-btn'
+                    type='submit'
+                    value='Search'
+                    onClick={e=>this.onSearchSubmit(e)}
+                  />
                 </Label>
               </FormGroup>
             </Form>
@@ -131,14 +198,10 @@ class App extends Component {
               onClick={e=>this.onChooseItem(e)}>
             {
               searchListItems.length > 0
-              ? searchListItems.map(item => (
-                <ListGroupItem
-                  className='list-group-item'
-                  key={item.ndbno}
-                  name={item.name}
-                >{item.name}
-                </ListGroupItem>
-              ))
+              ? <ItemListGroup
+              searchListItems={searchListItems}
+              adjSearchListItems={adjSearchListItems}
+              />
               : ''
             }
             </ListGroup>
@@ -146,6 +209,7 @@ class App extends Component {
               ? <Sidebar
                   item1={item1}
                   item2={item2}
+                  removeChosenItem={this.removeChosenItem}
                 />
               : ''
             }
