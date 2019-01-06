@@ -140,27 +140,26 @@ class App extends Component {
 
   displayListName = items => {
     //i dont think this is wha I want: let displayName;
-  // //adjSearchlistItems and pass this to itemlist group, add new name property to object
+    //adjSearchlistItems and pass this to itemlist group, add new name property to object
     let listItemsDisplayName = items.map(itemObject => {
-  //     //var display name will house the name I want displayed on
-      let displayName = itemObject.name.split('upc', 1)[0];
-  //     //careful with above: does 'let' reassign to new itemObject in this loop? I think so
-
-  //     //add a new property to each itemObject; 'displayName'
-      Object.assign(itemObject, { newName: displayName })
-  //   })
-    // console.log(itemObject) --function working
+    
+      //var displayName will house the name I want displayed to user
+      let displayName = itemObject.name.split('UPC', 1)[0];
+      //careful with above: does 'let' reassign to new itemObject in this loop? I think so
+      
+      //add a new property to each itemObject; 'displayName'
+      let displayNameAdded = Object.assign(itemObject, { displayName })
+      return displayNameAdded;
+      // working but still changing original array (searchListItems)
     })
+
     this.setState({
       adjSearchListItems: listItemsDisplayName
     })
-    //we get an array of 10 nulls...so something didn't work
-
-    // console.log(item) - now showing list items had to put in promise chain onSearchsubmit
   }
 
   render() {
-    // console.log(this.displayListName('john paul name upc bread animal'))
+
     const {
       searchListItems,
       adjSearchListItems,
@@ -199,9 +198,8 @@ class App extends Component {
             {
               searchListItems.length > 0
               ? <ItemListGroup
-              searchListItems={searchListItems}
-              adjSearchListItems={adjSearchListItems}
-              />
+                  adjSearchListItems={adjSearchListItems}
+                />
               : ''
             }
             </ListGroup>
