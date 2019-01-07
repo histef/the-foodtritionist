@@ -1,21 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { ListGroupItem } from 'reactstrap';
 
-
-class ItemListGroup extends Component {
-  render() {
-    return (
-      this.props.searchListItems.map(item =>
-      (
-        <ListGroupItem
-          className='list-group-item'
-          key={item.ndbno}
-          name={item.name}
-        >{this.props.displayListName(`${item.name}`)}
-        </ListGroupItem>
-      ))
-    )
-  }
+const ItemListGroup = ({ adjSearchListItems }) => {
+  return (
+    adjSearchListItems.map(item =>
+    (
+      <ListGroupItem
+        className='list-group-item'
+        key={item.ndbno}
+        name={item.name}
+      >{item.displayName}
+      </ListGroupItem>
+    ))
+  )
 }
 
 export default ItemListGroup;
