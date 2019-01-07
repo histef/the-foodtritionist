@@ -53,7 +53,7 @@ class App extends Component {
         })
       })
       .then(dat => 
-        this.displayListName(this.state.searchListItems)
+        this.displayListNames(this.state.searchListItems)
       )
       .catch(error => console.log(error))
     }
@@ -77,8 +77,8 @@ class App extends Component {
 
   //user chooses items for search results
   onChooseItem = (e) => {
-    const { item1Card, searchListItems } = this.state;
-    const item = searchListItems.filter(item => e.target.getAttribute('name') === item.name);
+    const { item1Card, adjSearchListItems } = this.state;
+    const item = adjSearchListItems.filter(item => e.target.getAttribute('name') === item.name);
     const itemId = item[0].ndbno;
 
     //if this.state for item1 is filled, then setState for item2, or else setState to item1
@@ -138,18 +138,23 @@ class App extends Component {
     }
   }
 
-  displayListName = items => {
-    //let displayName;
+  changeDisplayName = itemName => {
+    //var displayName will house the name I want displayed to user
+    return itemName.split(', UPC', 1)[0];
+  }
 
-    //set state for adjSearchListItems with fixed display name and pass that to ItemListGroup
+  addDisplayNameProp = (itemObject, displayName) => {
+    return Object.assign(itemObject, { displayName })
+  }
+
+  displayListNames = items => {
+    //set state for adjSearchListItems with adjuested display name and pass that to ItemListGroup
     let listItemsDisplayName = items.map(itemObject => {
     
-      //var displayName will house the name I want displayed to user
-      let displayName = itemObject.name.split('UPC', 1)[0];
-      //careful with above: does 'let' reassign to new itemObject in this loop? I think so
+      let displayName = this.changeDisplayName(itemObject.name);
 
       //add a new property to each itemObject; 'displayName'
-      let displayNameAdded = Object.assign(itemObject, { displayName })
+      let displayNameAdded = this.addDisplayNameProp(itemObject, displayName);
       return displayNameAdded;
       // working but still changing original array (searchListItems)
     })
@@ -157,6 +162,12 @@ class App extends Component {
     this.setState({
       adjSearchListItems: listItemsDisplayName
     })
+  }
+
+  displayChosenItem = item => {
+    //change chosen items display name
+    let displayName = this.changeDisplayName(item.name);
+
   }
 
   render() {
