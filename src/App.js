@@ -139,14 +139,15 @@ class App extends Component {
   }
 
   displayListName = items => {
-    //i dont think this is wha I want: let displayName;
-    //adjSearchlistItems and pass this to itemlist group, add new name property to object
+    //let displayName;
+
+    //set state for adjSearchListItems with fixed display name and pass that to ItemListGroup
     let listItemsDisplayName = items.map(itemObject => {
     
       //var displayName will house the name I want displayed to user
       let displayName = itemObject.name.split('UPC', 1)[0];
       //careful with above: does 'let' reassign to new itemObject in this loop? I think so
-      
+
       //add a new property to each itemObject; 'displayName'
       let displayNameAdded = Object.assign(itemObject, { displayName })
       return displayNameAdded;
