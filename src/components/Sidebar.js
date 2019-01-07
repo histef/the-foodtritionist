@@ -11,14 +11,14 @@ const Sidebar = ({ item1, item2, removeChosenItem}) => {
         className='close-btn'
         onClick={e => removeChosenItem(e)}
         >X</p>
-        <p>{item1.name}</p>
+        <p className="item-title">{item1.name}</p>
       </div>
       <div className='comp-list-item item2'>
         <p
           className='close-btn'
           onClick={e => removeChosenItem(e)}
         >X</p>
-        <p>{item2.name}</p>
+        <p className="item-title">{item2.name}</p>
       </div>
         <Link to='/comparepage'>
           <Button

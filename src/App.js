@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Compare from './components/ComparePage';
+import ItemListGroup from './ItemListGroup';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, FormGroup, Label, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import { Form, FormGroup, Label, Input, ListGroup } from 'reactstrap';
 import './App.css';
 
 class App extends Component {
@@ -11,14 +12,15 @@ class App extends Component {
   state = {
     search: '',
     searchListItems: [],
+    adjSearchListItems: [],
     item1: [],
-    item2: [],
     cal1: [],
     vitE1: [],
     fat1: [],
     sugar1: [],
     item1Card: false,
     item2Card: false,
+    item2: [],
     cal2: [],
     vitE2: [],
     fat2: [],
@@ -50,8 +52,12 @@ class App extends Component {
           searchListItems: data.list.item
         })
       })
+      .then(dat => 
+        this.displayListNames(this.state.searchListItems)
+      )
       .catch(error => console.log(error))
     }
+
   }
 
   onPagination = () => {
@@ -71,8 +77,8 @@ class App extends Component {
 
   //user chooses items for search results
   onChooseItem = (e) => {
-    const { item1Card, searchListItems } = this.state;
-    const item = searchListItems.filter(item => e.target.getAttribute('name') === item.name);
+    const { item1Card, adjSearchListItems } = this.state;
+    const item = adjSearchListItems.filter(item => e.target.getAttribute('name') === item.name);
     const itemId = item[0].ndbno;
 
     //if this.state for item1 is filled, then setState for item2, or else setState to item1
@@ -107,9 +113,71 @@ class App extends Component {
     }
   }
 
+  removeChosenItem = e => {
+    if (e.target.parentNode.className === 'item1'){
+      //remove item one stuff
+      this.setState({
+        item1: [],
+        cal1: [],
+        vitE1: [],
+        fat1: [],
+        sugar1: [],
+        item1Card: false,
+      })
+    }
+    else if (e.target.parentNode.className === 'item2') {
+      //remove item2 stuff
+      this.setState({
+        item2Card: false,
+        item2: [],
+        cal2: [],
+        vitE2: [],
+        fat2: [],
+        sugar2: []
+      })
+    }
+  }
+
+  changeDisplayName = itemName => {
+    //var displayName will house the name I want displayed to user
+    return itemName.split(', UPC', 1)[0];
+  }
+
+  addDisplayNameProp = (itemObject, displayName) => {
+    return Object.assign(itemObject, { displayName })
+  }
+
+  displayListNames = items => {
+    //set state for adjSearchListItems with adjuested display name and pass that to ItemListGroup
+    let listItemsDisplayName = items.map(itemObject => {
+    
+      let displayName = this.changeDisplayName(itemObject.name);
+
+      //add a new property to each itemObject; 'displayName'
+      let displayNameAdded = this.addDisplayNameProp(itemObject, displayName);
+      return displayNameAdded;
+      // working but still changing original array (searchListItems)
+    })
+
+    this.setState({
+      adjSearchListItems: listItemsDisplayName
+    })
+  }
+
+  displayChosenItem = item => {
+    //change chosen items display name
+    let displayName = this.changeDisplayName(item.name);
+
+  }
+
   render() {
 
-    const { searchListItems, item1, item2 } = this.state;
+    const {
+      searchListItems,
+      adjSearchListItems,
+      item1,
+      item2
+    } = this.state;
 
     return (
       <div className="App">
@@ -121,8 +189,18 @@ class App extends Component {
             <Form inline className='searchfield'>
               <FormGroup>
                 <Label for='search'>
-                  <Input id='search' className='search-text' onChange={e=>this.onSearch(e)} type='search' placeholder='enter food item'/>
-                  <Input className='search-btn' type='submit' value='Search' onClick={e=>this.onSearchSubmit(e)}/>
+                  <Input id='search'
+                    className='search-text'
+                    onChange={e=>this.onSearch(e)}
+                    type='search'
+                    placeholder='enter food item'
+                  />
+                  <Input
+                    className='search-btn'
+                    type='submit'
+                    value='Search'
+                    onClick={e=>this.onSearchSubmit(e)}
+                  />
                 </Label>
               </FormGroup>
             </Form>
@@ -131,14 +209,9 @@ class App extends Component {
               onClick={e=>this.onChooseItem(e)}>
             {
               searchListItems.length > 0
-              ? searchListItems.map(item => (
-                <ListGroupItem
-                  className='list-group-item'
-                  key={item.ndbno}
-                  name={item.name}
-                >{item.name}
-                </ListGroupItem>
-              ))
+              ? <ItemListGroup
+                  adjSearchListItems={adjSearchListItems}
+                />
               : ''
             }
             </ListGroup>
@@ -146,6 +219,7 @@ class App extends Component {
               ? <Sidebar
                   item1={item1}
                   item2={item2}
+                  removeChosenItem={this.removeChosenItem}
                 />
               : ''
             }
